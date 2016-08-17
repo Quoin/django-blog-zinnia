@@ -1,5 +1,5 @@
 """Views for Zinnia archives"""
-import datetime
+from datetime import date
 
 from django.utils import timezone
 from django.views.generic.dates import BaseArchiveIndexView
@@ -9,7 +9,7 @@ from django.views.generic.dates import BaseWeekArchiveView
 from django.views.generic.dates import BaseDayArchiveView
 from django.views.generic.dates import BaseTodayArchiveView
 
-from zinnia.models.entry import Entry
+from zinnia.models.entry import Entry, Category
 from zinnia.views.mixins.archives import ArchiveMixin
 from zinnia.views.mixins.archives import PreviousNextPublishedMixin
 from zinnia.views.mixins.callable_queryset import CallableQuerysetMixin
@@ -21,6 +21,7 @@ from zinnia.views.mixins.templates import \
 from zinnia.views.mixins.tz_fixes import EntryDayTZFix
 from zinnia.views.mixins.tz_fixes import EntryWeekTZFix
 from zinnia.views.mixins.tz_fixes import EntryMonthTZFix
+from quoin.feature import models
 
 
 class EntryArchiveMixin(ArchiveMixin,
@@ -44,10 +45,18 @@ class EntryArchiveMixin(ArchiveMixin,
 class EntryIndex(EntryArchiveMixin,
                  EntryQuerysetArchiveTodayTemplateResponseMixin,
                  BaseArchiveIndexView):
-    """
+    """python-base/lib/python2.7/site-packages/zinnia/views/archives.py
     View returning the archive index.
     """
     context_object_name = 'entry_list'
+
+    def get_context_data(self, **kwargs):
+        context = super(EntryIndex, self).get_context_data(**kwargs)
+        tech_talk_id = Category.objects.get(title="Technology Sessions").id
+        context['upcoming'] = Entry.objects.filter(categories=tech_talk_id, creation_date__gt=date.today()).order_by('creation_date')
+        testimonials = models.Testimonial.objects.order_by('?')
+        context['testimonial'] = testimonials[0]
+        return context
 
 
 class EntryYear(EntryArchiveMixin, BaseYearArchiveView):

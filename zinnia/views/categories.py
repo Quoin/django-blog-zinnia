@@ -1,4 +1,3 @@
-"""Views for Zinnia categories"""
 from django.shortcuts import get_object_or_404
 from django.views.generic.list import ListView
 from django.views.generic.list import BaseListView
@@ -7,6 +6,7 @@ from zinnia.models.category import Category
 from zinnia.settings import PAGINATION
 from zinnia.views.mixins.templates import EntryQuerysetTemplateResponseMixin
 from zinnia.views.mixins.prefetch_related import PrefetchCategoriesAuthorsMixin
+from quoin.feature import models
 
 
 def get_category_or_404(path):
@@ -43,6 +43,8 @@ class BaseCategoryDetail(object):
         """
         context = super(BaseCategoryDetail, self).get_context_data(**kwargs)
         context['category'] = self.category
+        testimonials = models.Testimonial.objects.order_by('?')
+        context['testimonial'] = testimonials[0]
         return context
 
 

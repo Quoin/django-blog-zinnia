@@ -1,4 +1,3 @@
-"""Views for Zinnia entries"""
 from django.views.generic.dates import BaseDateDetailView
 
 from zinnia.models.entry import Entry
@@ -7,6 +6,7 @@ from zinnia.views.mixins.entry_protection import EntryProtectionMixin
 from zinnia.views.mixins.callable_queryset import CallableQuerysetMixin
 from zinnia.views.mixins.templates import EntryArchiveTemplateResponseMixin
 from zinnia.views.mixins.tz_fixes import EntryDateDetailTZFix
+from quoin.feature import models
 
 
 class EntryDateDetail(EntryDateDetailTZFix,
@@ -32,3 +32,11 @@ class EntryDateDetail(EntryDateDetailTZFix,
 class EntryDetail(EntryProtectionMixin, EntryDateDetail):
     """Detailled view archive view for an Entry
     with password and login protections"""
+    template_name = 'zinnia/entry_detail_base.html'
+    model = Entry
+
+    def get_context_data(self, **kwargs):
+        context = super(EntryDetail, self).get_context_data(**kwargs)
+        testimonials = models.Testimonial.objects.order_by('?')
+        context['testimonial'] = testimonials[0]
+        return context

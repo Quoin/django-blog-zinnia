@@ -1,4 +1,3 @@
-"""Views for Zinnia authors"""
 from django.db.models import Count
 from django.shortcuts import get_object_or_404
 from django.views.generic.list import ListView
@@ -8,6 +7,7 @@ from zinnia.settings import PAGINATION
 from zinnia.models.author import Author
 from zinnia.views.mixins.templates import EntryQuerysetTemplateResponseMixin
 from zinnia.views.mixins.prefetch_related import PrefetchCategoriesAuthorsMixin
+from quoin.feature import models
 
 
 class AuthorList(ListView):
@@ -46,6 +46,8 @@ class BaseAuthorDetail(object):
         """
         context = super(BaseAuthorDetail, self).get_context_data(**kwargs)
         context['author'] = self.author
+        testimonials = models.Testimonial.objects.order_by('?')
+        context['testimonial'] = testimonials[0]
         return context
 
 

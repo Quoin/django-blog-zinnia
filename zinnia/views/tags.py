@@ -1,4 +1,3 @@
-"""Views for Zinnia tags"""
 from django.http import Http404
 from django.views.generic.list import ListView
 from django.views.generic.list import BaseListView
@@ -13,6 +12,7 @@ from zinnia.models.entry import Entry
 from zinnia.settings import PAGINATION
 from zinnia.views.mixins.templates import EntryQuerysetTemplateResponseMixin
 from zinnia.views.mixins.prefetch_related import PrefetchCategoriesAuthorsMixin
+from quoin.feature import models
 
 
 class TagList(ListView):
@@ -56,6 +56,8 @@ class BaseTagDetail(object):
         """
         context = super(BaseTagDetail, self).get_context_data(**kwargs)
         context['tag'] = self.tag
+        testimonials = models.Testimonial.objects.order_by('?')
+        context['testimonial'] = testimonials[0]
         return context
 
 
