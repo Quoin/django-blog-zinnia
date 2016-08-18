@@ -8,9 +8,10 @@ from zinnia.models.author import Author
 from zinnia.views.mixins.templates import EntryQuerysetTemplateResponseMixin
 from zinnia.views.mixins.prefetch_related import PrefetchCategoriesAuthorsMixin
 from quoin.feature import models
+from quoin.core.views import TestimonialView
 
 
-class AuthorList(ListView):
+class AuthorList(ListView, TestimonialView):
     """
     View returning a list of all published authors.
     """
@@ -24,7 +25,7 @@ class AuthorList(ListView):
             count_entries_published=Count('entries'))
 
 
-class BaseAuthorDetail(object):
+class BaseAuthorDetail(object, TestimonialView):
     """
     Mixin providing the behavior of the author detail view,
     by returning in the context the current author and a
@@ -46,8 +47,6 @@ class BaseAuthorDetail(object):
         """
         context = super(BaseAuthorDetail, self).get_context_data(**kwargs)
         context['author'] = self.author
-        testimonials = models.Testimonial.objects.order_by('?')
-        context['testimonial'] = testimonials[0]
         return context
 
 

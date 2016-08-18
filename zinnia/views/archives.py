@@ -22,6 +22,7 @@ from zinnia.views.mixins.tz_fixes import EntryDayTZFix
 from zinnia.views.mixins.tz_fixes import EntryWeekTZFix
 from zinnia.views.mixins.tz_fixes import EntryMonthTZFix
 from quoin.feature import models
+from quoin.core.views import TestimonialView
 
 
 class EntryArchiveMixin(ArchiveMixin,
@@ -44,7 +45,7 @@ class EntryArchiveMixin(ArchiveMixin,
 
 class EntryIndex(EntryArchiveMixin,
                  EntryQuerysetArchiveTodayTemplateResponseMixin,
-                 BaseArchiveIndexView):
+                 BaseArchiveIndexView, TestimonialView):
     """python-base/lib/python2.7/site-packages/zinnia/views/archives.py
     View returning the archive index.
     """
@@ -54,8 +55,6 @@ class EntryIndex(EntryArchiveMixin,
         context = super(EntryIndex, self).get_context_data(**kwargs)
         tech_talk_id = Category.objects.get(title="Technology Sessions").id
         context['upcoming'] = Entry.objects.filter(categories=tech_talk_id, creation_date__gt=date.today()).order_by('creation_date')
-        testimonials = models.Testimonial.objects.order_by('?')
-        context['testimonial'] = testimonials[0]
         return context
 
 

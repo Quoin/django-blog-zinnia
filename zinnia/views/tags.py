@@ -13,9 +13,10 @@ from zinnia.settings import PAGINATION
 from zinnia.views.mixins.templates import EntryQuerysetTemplateResponseMixin
 from zinnia.views.mixins.prefetch_related import PrefetchCategoriesAuthorsMixin
 from quoin.feature import models
+from quoin.core.views import TestimonialView
 
 
-class TagList(ListView):
+class TagList(ListView, TestimonialView):
     """
     View return a list of all published tags.
     """
@@ -31,7 +32,7 @@ class TagList(ListView):
             Entry.published.all(), counts=True)
 
 
-class BaseTagDetail(object):
+class BaseTagDetail(object, TestimonialView):
     """
     Mixin providing the behavior of the tag detail view,
     by returning in the context the current tag and a
@@ -56,8 +57,6 @@ class BaseTagDetail(object):
         """
         context = super(BaseTagDetail, self).get_context_data(**kwargs)
         context['tag'] = self.tag
-        testimonials = models.Testimonial.objects.order_by('?')
-        context['testimonial'] = testimonials[0]
         return context
 
 

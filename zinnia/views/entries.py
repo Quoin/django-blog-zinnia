@@ -7,6 +7,7 @@ from zinnia.views.mixins.callable_queryset import CallableQuerysetMixin
 from zinnia.views.mixins.templates import EntryArchiveTemplateResponseMixin
 from zinnia.views.mixins.tz_fixes import EntryDateDetailTZFix
 from quoin.feature import models
+from quoin.core.views import TestimonialView
 
 
 class EntryDateDetail(EntryDateDetailTZFix,
@@ -29,14 +30,6 @@ class EntryDateDetail(EntryDateDetailTZFix,
     queryset = Entry.published.on_site
 
 
-class EntryDetail(EntryProtectionMixin, EntryDateDetail):
+class EntryDetail(EntryProtectionMixin, EntryDateDetail, TestimonialView):
     """Detailled view archive view for an Entry
     with password and login protections"""
-    template_name = 'zinnia/entry_detail_base.html'
-    model = Entry
-
-    def get_context_data(self, **kwargs):
-        context = super(EntryDetail, self).get_context_data(**kwargs)
-        testimonials = models.Testimonial.objects.order_by('?')
-        context['testimonial'] = testimonials[0]
-        return context

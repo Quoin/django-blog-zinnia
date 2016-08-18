@@ -7,6 +7,7 @@ from zinnia.settings import PAGINATION
 from zinnia.views.mixins.templates import EntryQuerysetTemplateResponseMixin
 from zinnia.views.mixins.prefetch_related import PrefetchCategoriesAuthorsMixin
 from quoin.feature import models
+from quoin.core.views import TestimonialView
 
 
 def get_category_or_404(path):
@@ -15,14 +16,14 @@ def get_category_or_404(path):
     return get_object_or_404(Category, slug=path_bits[-1])
 
 
-class CategoryList(ListView):
+class CategoryList(ListView, TestimonialView):
     """
     View returning a list of all the categories.
     """
     queryset = Category.objects.all()
 
 
-class BaseCategoryDetail(object):
+class BaseCategoryDetail(object, TestimonialView):
     """
     Mixin providing the behavior of the category detail view,
     by returning in the context the current category and a
@@ -43,8 +44,6 @@ class BaseCategoryDetail(object):
         """
         context = super(BaseCategoryDetail, self).get_context_data(**kwargs)
         context['category'] = self.category
-        testimonials = models.Testimonial.objects.order_by('?')
-        context['testimonial'] = testimonials[0]
         return context
 
 
