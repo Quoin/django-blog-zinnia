@@ -16,14 +16,14 @@ def get_category_or_404(path):
     return get_object_or_404(Category, slug=path_bits[-1])
 
 
-class CategoryList(ListView, TestimonialView):
+class CategoryList(TestimonialView, ListView):
     """
     View returning a list of all the categories.
     """
     queryset = Category.objects.all()
 
 
-class BaseCategoryDetail(object, TestimonialView):
+class BaseCategoryDetail(TestimonialView, object):
     """
     Mixin providing the behavior of the category detail view,
     by returning in the context the current category and a

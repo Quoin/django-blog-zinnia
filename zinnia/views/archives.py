@@ -43,9 +43,9 @@ class EntryArchiveMixin(ArchiveMixin,
     queryset = Entry.published.all
 
 
-class EntryIndex(EntryArchiveMixin,
+class EntryIndex(TestimonialView, EntryArchiveMixin,
                  EntryQuerysetArchiveTodayTemplateResponseMixin,
-                 BaseArchiveIndexView, TestimonialView):
+                 BaseArchiveIndexView):
     """python-base/lib/python2.7/site-packages/zinnia/views/archives.py
     View returning the archive index.
     """
