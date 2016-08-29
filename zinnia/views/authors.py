@@ -11,7 +11,7 @@ from quoin.feature import models
 from quoin.core.views import TestimonialView
 
 
-class AuthorList(ListView, TestimonialView):
+class AuthorList(TestimonialView, ListView):
     """
     View returning a list of all published authors.
     """
@@ -25,7 +25,7 @@ class AuthorList(ListView, TestimonialView):
             count_entries_published=Count('entries'))
 
 
-class BaseAuthorDetail(object, TestimonialView):
+class BaseAuthorDetail(TestimonialView, object):
     """
     Mixin providing the behavior of the author detail view,
     by returning in the context the current author and a

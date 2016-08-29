@@ -30,6 +30,6 @@ class EntryDateDetail(EntryDateDetailTZFix,
     queryset = Entry.published.on_site
 
 
-class EntryDetail(EntryProtectionMixin, EntryDateDetail, TestimonialView):
+class EntryDetail(TestimonialView, EntryProtectionMixin, EntryDateDetail):
     """Detailled view archive view for an Entry
     with password and login protections"""

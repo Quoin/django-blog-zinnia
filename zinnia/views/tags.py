@@ -16,7 +16,7 @@ from quoin.feature import models
 from quoin.core.views import TestimonialView
 
 
-class TagList(ListView, TestimonialView):
+class TagList(TestimonialView, ListView):
     """
     View return a list of all published tags.
     """
@@ -32,7 +32,7 @@ class TagList(ListView, TestimonialView):
             Entry.published.all(), counts=True)
 
 
-class BaseTagDetail(object, TestimonialView):
+class BaseTagDetail(TestimonialView, object):
     """
     Mixin providing the behavior of the tag detail view,
     by returning in the context the current tag and a
